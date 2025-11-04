@@ -29,7 +29,7 @@ function Login() {
 	return (
 		<>
 			<Header />
-			<div className='min-h-screen bg-black flex items-center justify-center p-4'>
+			<div className='min-h-screen  flex items-center justify-center p-4'>
 				{/* Background Grid */}
 				<div
 					className='fixed inset-0 z-0 pointer-events-none'
