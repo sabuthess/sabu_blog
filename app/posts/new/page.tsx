@@ -3,63 +3,83 @@ import { redirect } from "next/navigation";
 import { Header } from "@/app/components/Header";
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import axios from "axios";
+import axios, { toFormData } from "axios";
 import { useSession } from "next-auth/react";
+import { toast } from "react-toastify";
+import { createPost } from "@/actions/createPost";
 
-export default function CreatePostPage() {
+function CreatePostPage() {
 	const fileInputRef = useRef<HTMLInputElement>(null);
-	const [image, setImage] = useState();
-	const [title, setTitle] = useState("");
-	const [content, setContent] = useState("");
+	const [imageFile, setImageFile] = useState<File | string>();
 	const [preview, setPreview] = useState();
-	const [loading, setLoadin] = useState(false);
+	const [isSubmitting, setIsSubmitting] = useState(false);
 	const { data: session } = useSession();
 
-	if (!session) {
-		redirect("/login");
-	}
+	if (!session) redirect("/login");
 
-	const handleFileClick = () => {
-		fileInputRef.current?.click();
+	const handleFileClick = () => fileInputRef.current?.click();
+
+	const handleFileChange = (event) => {
+		setImageFile(event.target.files[0]);
 	};
 
-	const handleFileChange = (event: React.FormEvent) => {
-		setImage(event.target.files[0]);
+	const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+		event.preventDefault();
+		setIsSubmitting(true);
+
+		try {
+			const formData = new FormData(event.currentTarget);
+			const title = formData.get("title")?.toString().trim();
+			const content = formData.get("content")?.toString().trim();
+			let imageUrl: string | undefined;
+
+			if (imageFile) {
+				toast.info("Subiendo imagen...");
+
+				const uploadFormData = new FormData();
+				uploadFormData.append("file", imageFile);
+
+				const uploadResponse = await fetch("/api/upload", {
+					method: "POST",
+					body: uploadFormData,
+				});
+
+				if (!uploadResponse.ok) {
+					throw new Error("Error al subir la imagen");
+				}
+
+				const uploadResult = await uploadResponse.json();
+				imageUrl = uploadResult.url;
+				toast.success("Imagen subida exitosamente");
+			}
+			console.log("Creando post con:", { title, content, imageUrl }); // Debug
+
+			await createPost({
+				title,
+				content,
+				imageUrl,
+			});
+			toast.success("¡Post creado exitosamente!");
+		} catch (error) {
+			console.error("Error:", error);
+			toast.error(
+				error instanceof Error ? error.message : "Error al crear el post"
+			);
+		} finally {
+			setIsSubmitting(false);
+		}
 	};
 
 	useEffect(() => {
-		if (!image) {
+		if (!imageFile) {
 			return;
 		}
 
-		const objectUrl = URL.createObjectURL(image);
+		const objectUrl = URL.createObjectURL(imageFile);
 		setPreview(objectUrl);
 
 		return () => URL.revokeObjectURL(objectUrl);
-	}, [image]);
-
-	const handleSubmit = async (event: React.FormEvent) => {
-		event.preventDefault();
-
-		setLoadin(true);
-		try {
-			const res = await axios.post("/api/post", {
-				body: {
-					title,
-					content,
-					image: preview,
-					authorId: session?.user?.id,
-				},
-			});
-			setTitle("");
-			setContent("");
-			console.log(res.data);
-		} catch (error) {
-			console.log(error);
-		} finally {
-			setLoadin(false);
-		}
-	};
+	}, [imageFile]);
 
 	return (
 		<>
@@ -85,12 +105,16 @@ export default function CreatePostPage() {
 								onClick={handleFileClick}
 								className='bg-[#16a084]/20 p-2 border border-white/20 cursor-pointer'>
 								{}
-								{image ? <p>Update a cover image</p> : <p>Add a cover image</p>}
+								{imageFile ? (
+									<p>Update a cover image</p>
+								) : (
+									<p>Add a cover image</p>
+								)}
 							</button>
 						</div>
 						<div
 							style={{ position: "relative", width: "100%", height: "100%" }}>
-							{image && preview && (
+							{imageFile && preview && (
 								<Image
 									src={preview}
 									alt='Uploaded preview'
@@ -107,7 +131,6 @@ export default function CreatePostPage() {
 							className='py-2 px-4 bg-white/10 border border-white w-full outline-none'
 							placeholder='New post title here!'
 							required
-							onChange={(e) => setTitle(e.target.value)}
 						/>
 
 						<textarea
@@ -116,10 +139,9 @@ export default function CreatePostPage() {
 							className='py-2 px-4 h-[400px] border bg-white/10 w-full border-white outline-none overflow-auto overflow-y-auto'
 							placeholder='Write your post content here'
 							required
-							onChange={(e) => setContent(e.target.value)}
 						/>
-						{loading ? (
-							<div className="self-end animate animate-spin">
+						{isSubmitting ? (
+							<div className='self-end animate animate-spin'>
 								<div className=' w-12 h-12 border-4 border-white border-t-teal-500  rounded-full '></div>
 							</div>
 						) : (
@@ -129,11 +151,11 @@ export default function CreatePostPage() {
 								Upload
 							</button>
 						)}
-
-						{/* <BtnCreatePost/> */}
 					</form>
 				</div>
 			</main>
 		</>
 	);
 }
+
+export default CreatePostPage;
