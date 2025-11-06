@@ -2,12 +2,15 @@
 
 import { Header } from "../components/Header";
 import { Github } from "lucide-react";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
 
-// const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 function Login() {
+ 
+	const {data: session} = useSession()
 
+	if (session) redirect("/");
 
 	const handleSocialLogin = async (
 		provider: "google" | "facebook" | "github"
@@ -26,11 +29,12 @@ function Login() {
 		}
 	};
 
+
+
 	return (
 		<>
 			<Header />
 			<div className='min-h-screen  flex items-center justify-center p-4'>
-				{/* Background Grid */}
 				<div
 					className='fixed inset-0 z-0 pointer-events-none'
 					style={{
@@ -40,7 +44,6 @@ function Login() {
 					}}
 				/>
 
-				{/* Login Card */}
 				<div className='relative z-10 w-full max-w-md backdrop-blur-md rounded-2xl p-8 bg-white/10 border border-white/20 shadow-xl'>
 					<div className='text-center mb-8'>
 						<h1 className='text-3xl font-bold text-white mb-2'>Welcome Back</h1>
