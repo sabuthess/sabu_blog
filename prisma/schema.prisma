@@ -64,6 +64,7 @@ model Session {
 
 model Post {
   id        Int     @id @default(autoincrement())
+  imageUrl   String?
   title     String
   content   String?
   published Boolean @default(false)
