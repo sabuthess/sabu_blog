@@ -1,6 +1,5 @@
 import prisma from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
@@ -14,16 +13,13 @@ export async function POST(request: NextRequest) {
 				authorId,
 			},
 		});
-		return NextResponse.json({ messague: "post created", status: 201, post });
+		revalidatePath("/");
+		return NextResponse.json({ message: "post created", status: 201, post });
 	} catch (error) {
-		console.log(error);
+		console.log({message:"internal server error", error});
 		return NextResponse.json({
-			messague: "Server internal error",
+			message: "Server internal error",
 			status: 500,
 		});
-	}
-	finally{
-		revalidatePath("/");
-		redirect("/")
 	}
 }
