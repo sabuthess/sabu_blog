@@ -4,6 +4,7 @@ import "./globals.css";
 import { AuthProvider } from "./components/AuthProvider";
 import { getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]/route";
+import { Bounce, ToastContainer } from "react-toastify";
 
 const geistSans = Geist({
 	variable: "--font-geist-sans",
@@ -41,7 +42,22 @@ export default async function RootLayout({
 						}}
 					/>
 				</div>
-				<AuthProvider session={session}>{children}</AuthProvider>
+				<AuthProvider session={session}>
+					<ToastContainer
+						position='top-center'
+						autoClose={5000}
+						hideProgressBar={false}
+						newestOnTop={false}
+						closeOnClick={false}
+						rtl={false}
+						pauseOnFocusLoss
+						draggable
+						pauseOnHover
+						theme='light'
+						transition={Bounce}
+					/>
+					{children}
+				</AuthProvider>
 			</body>
 		</html>
 	);
