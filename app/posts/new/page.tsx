@@ -3,7 +3,6 @@ import { redirect } from "next/navigation";
 import { Header } from "@/app/components/Header";
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import axios, { toFormData } from "axios";
 import { useSession } from "next-auth/react";
 import { toast } from "react-toastify";
 import { createPost } from "@/actions/createPost";
@@ -50,9 +49,8 @@ function CreatePostPage() {
 
 				const uploadResult = await uploadResponse.json();
 				imageUrl = uploadResult.url;
-				toast.success("Imagen subida exitosamente");
+				await toast.success("Imagen subida exitosamente");
 			}
-			console.log("Creando post con:", { title, content, imageUrl }); // Debug
 
 			await createPost({
 				title,
