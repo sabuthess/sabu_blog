@@ -9,9 +9,14 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@mdx-js/loader": "^3.1.1",
+    "@mdx-js/react": "^3.1.1",
     "@next-auth/prisma-adapter": "^1.0.7",
+    "@next/mdx": "^16.0.1",
     "@prisma/client": "^6.18.0",
     "@prisma/extension-accelerate": "^2.0.2",
+    "@tailwindcss/typography": "^0.5.19",
+    "@types/mdx": "^2.0.13",
     "axios": "^1.13.1",
     "cloudinary": "^2.8.0",
     "dotenv": "^17.2.3",
@@ -21,7 +26,10 @@
     "next-cloudinary": "^6.17.1",
     "react": "19.2.0",
     "react-dom": "19.2.0",
+    "react-markdown": "^10.1.0",
+    "react-syntax-highlighter": "^16.1.0",
     "react-toastify": "^11.0.5",
+    "remark-gfm": "^4.0.1",
     "uuid": "^13.0.0"
   },
   "devDependencies": {
@@ -29,10 +37,12 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "autoprefixer": "^10.4.21",
     "eslint": "^9",
     "eslint-config-next": "16.0.1",
+    "postcss": "^8.5.6",
     "prisma": "^6.18.0",
-    "tailwindcss": "^4",
+    "tailwindcss": "^4.1.17",
     "tsx": "^4.20.6",
     "typescript": "^5"
   }
