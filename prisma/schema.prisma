@@ -19,6 +19,7 @@ model User {
   email String  @unique
   name  String?
   posts Post[]
+  comments  Comment[]
   profile       Profile?
   accounts      Account[]
   sessions      Session[]
@@ -67,7 +68,23 @@ model Post {
   imageUrl   String?
   title     String
   content   String?
+  commets Comment[]
   published Boolean @default(false)
   authorId  String
   author    User    @relation(fields: [authorId], references: [id])
+}
+
+model Comment {
+  id         Int       @id @default(autoincrement())
+  message    String
+  parent_id  Int?
+  post_id    Int
+  user_id    String
+
+  post    Post    @relation(fields: [post_id], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  parent  Comment? @relation("CommentReplies", fields: [parent_id], references: [id])
+  replies Comment[] @relation("CommentReplies")
+
+  createdAt DateTime @default(now())
 }
