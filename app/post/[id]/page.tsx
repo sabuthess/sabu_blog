@@ -7,6 +7,7 @@ import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { notFound } from "next/navigation";
 import remarkGfm from "remark-gfm";
+import { Image as ImageNotFound} from "lucide-react";
 
 async function Post({ params }: { params: Promise<{ id: string }> }) {
 	const { id } = await params;
@@ -28,12 +29,20 @@ async function Post({ params }: { params: Promise<{ id: string }> }) {
 				<h1 className='self-start text-4xl font-bold mb-8 '>{post.title}</h1>
 				<Link href={`/user/${post.authorId}`}>by {post?.author?.name}</Link>
 				<div className='relative w-full h-[200px] '>
+					{post.imageUrl ?
+					
 					<Image
-						src={`${post.imageUrl}`}
+						src={`${post.imageUrl }`}
 						alt='Uploaded preview'
 						fill
 						style={{ objectFit: "cover" }}
 					/>
+					: 
+					<div className="flex flex-col items-center justify-center">
+					<ImageNotFound size={200} />
+					<span>Image not found</span>
+					</div>
+					}
 				</div>
 				<article className='w-full flex flex-col items-center justify-center mx-auto space-y-10'>
 					<p className=' text-center  text-3xl'></p>
