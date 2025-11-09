@@ -1,0 +1,16 @@
+-------------------- TODO LIST --------------------
+    - la peticion se enviara /api/post/
+	- primero cuando se envie toda la data cuando se cree un post, primeror se deve de guardar la imagen en cloudinary✅
+	- cuando la imagen ya este subida en cloudinary debemos obterner la ruta(url) de la imagen ✅
+	- guardar la url de la imagen con el title, content, authname en prisma ✅
+	- cuando el usuario quieera ver el post deberemos mostrar la informacion en formato markdon ya con estilos ✅,
+	- agregar comentarios ✅
+	- crear modelo de comentarios y relacionarlos con el post en el que se hizo y el usuario que lo hizo ✅
+    - crear dashboard: 
+	    - poder eliminar el post
+	    - poder actualizar el posts, 
+    -
+
+	- 
+    - desplegar el proyecto con docker
+    -documentar el proyecto 
