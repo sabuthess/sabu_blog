@@ -9,8 +9,7 @@
     - crear dashboard: 
 	    - poder eliminar el post
 	    - poder actualizar el posts, 
-    -
-
+    - hacer la app responsive
 	- 
     - desplegar el proyecto con docker
     -documentar el proyecto 
