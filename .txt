@@ -9,7 +9,8 @@
     - crear dashboard: 
 	    - poder eliminar el post
 	    - poder actualizar el posts, 
-    -
+    - Crear Modal para eliminar el post
+	- Crear un PostCard para mostrar una imagen y el titulo del post creado 
 
 	- 
     - desplegar el proyecto con docker
